@@ -6,29 +6,31 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue'])
 
 const waveTypes = [
-  { value: 'sine', label: 'Seno' },
-  { value: 'square', label: 'Quadrada' },
-  { value: 'sawtooth', label: 'Serra' },
-  { value: 'triangle', label: 'Triangular' }
+  { id: 0, value: 'sine', label: 'Seno' },
+  { id: 1, value: 'square', label: 'Quadrada' },
+  { id: 2, value: 'sawtooth', label: 'Serra' },
+  { id: 3, value: 'triangle', label: 'Triangular' }
 ]
 </script>
 
 <template>
   <div class="wave-selector">
     <label>Tipo de Onda:</label>
-    <select 
-      :value="modelValue"
-      @change="emit('update:modelValue', $event.target.value)"
-      :disabled="disabled"
-    >
-      <option 
-        v-for="type in waveTypes" 
-        :key="type.value" 
-        :value="type.value"
-      >
+
+
+    <select :value="modelValue" @change="emit('update:modelValue', $event.target.value)">
+
+      <option v-for="type in waveTypes" :key="type.id" :value="type.value">
+
         {{ type.label }}
+
       </option>
+
+
     </select>
+
+
+
   </div>
 </template>
 

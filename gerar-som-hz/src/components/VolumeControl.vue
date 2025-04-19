@@ -8,7 +8,10 @@ const emit = defineEmits(['update:modelValue'])
 
 <template>
   <div class="volume-control">
-    <label>Volume: {{ (modelValue * 100).toFixed(0) }}%</label>
+
+    <!---
+    <label> Volume: {{ (modelValue * 100).toFixed(0) }} %  </label>--->
+
     <input
       type="range"
       min="0"
