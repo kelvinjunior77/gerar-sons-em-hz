@@ -10,6 +10,25 @@ import FrequencyPresets from './components/FrequencyPresets.vue'
 import AudioVisualizer from './components/AudioVisualizer.vue'
 import BinauralBeats from './components/BinauralBeats.vue'
 
+// Exemplo simples para salvar configurações (adicione no App.vue)
+const saveSettings = () => {
+  localStorage.setItem('audioSettings', JSON.stringify({
+    volume: volume.value,
+    waveType: waveType.value,
+    frequency: frequency.value
+  }))
+}
+
+// E carregar no onMounted
+const loadSettings = () => {
+  const saved = JSON.parse(localStorage.getItem('audioSettings'))
+  if (saved) {
+    volume.value = saved.volume
+    waveType.value = saved.waveType
+    frequency.value = saved.frequency
+  }
+}
+
 // Estado reativo
 const frequency = ref(440)
 const duration = ref(2)
