@@ -9,7 +9,52 @@ import VolumeControl from './components/VolumeControl.vue'
 import FrequencyPresets from './components/FrequencyPresets.vue'
 import AudioVisualizer from './components/AudioVisualizer.vue'
 import BinauralBeats from './components/BinauralBeats.vue'
+import LoadingSpinner from './components/LoadingSpinner.vue'
 
+
+// Estados de loading
+const isLoading = ref(true)
+const loadingMessage = ref("Inicializando sistema de áudio...")
+const loadingProgress = ref(0)
+
+onMounted(async () => {
+  try {
+    // Tempo mínimo de loading (melhor experiência)
+    const minLoadingTime = new Promise(resolve => setTimeout(resolve, 1000))
+    
+    // Inicialização real
+    await initAudioContext()
+    
+    // Garante o tempo mínimo
+    await minLoadingTime
+  } catch (e) {
+    console.error("Erro na inicialização:", e)
+    error.value = "Erro ao inicializar o sistema de áudio"
+  } finally {
+    isLoading.value = false
+  }
+})
+
+const updateLoading = (message, progress) => {
+  loadingMessage.value = message
+  loadingProgress.value = progress
+}
+
+
+const initAudioContext = async () => {
+  try {
+    loadingMessage.value = "Criando contexto de áudio..."
+    audioContext = new (window.AudioContext || window.webkitAudioContext)()
+    
+    loadingMessage.value = "Configurando analisador..."
+    setupAnalyser()
+    
+    loadingMessage.value = "Preparando recursos..."
+    // Adicione aqui qualquer outra inicialização necessária
+  } catch (e) {
+    throw e
+  }
+}
 
 
 
@@ -256,6 +301,21 @@ watch([baseFrequency, beatFrequency], () => {
 </script>
 
 <template>
+
+<LoadingSpinner 
+    v-if="isLoading"
+    :message="loadingMessage"
+    :progress="loadingProgress"
+  />
+
+<!----<div v-if="isLoading" class="loading-overlay">
+    <div class="loading-container">
+      <div class="loading-spinner"></div>
+      <p>{{ loadingMessage }}</p>
+    </div>
+  </div> ------>
+
+  <div v-else class="container">
   <div class="container">
     <h1>Gerador de Tons Avançado</h1>
     
@@ -329,6 +389,8 @@ watch([baseFrequency, beatFrequency], () => {
       :beat-frequency="beatFrequency"
     />
   </div>
+</div>
+
 </template>
 
 <style scoped>
