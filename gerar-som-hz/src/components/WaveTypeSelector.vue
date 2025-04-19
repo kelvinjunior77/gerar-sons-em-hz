@@ -21,14 +21,9 @@ const waveTypes = [
     <select :value="modelValue" @change="emit('update:modelValue', $event.target.value)">
 
       <option v-for="type in waveTypes" :key="type.id" :value="type.value">
-
         {{ type.label }}
-
       </option>
-
-
     </select>
-
 
 
   </div>
