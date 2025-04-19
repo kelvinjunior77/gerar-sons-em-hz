@@ -1,9 +1,13 @@
 <script setup>
 defineProps({
+  
   isPlaying: {
     type: Boolean,
     required: true
   },
+  
+  isRecording: Boolean,
+
   infinitePlay: {
     type: Boolean,
     required: true
@@ -20,6 +24,10 @@ const emit = defineEmits(['play', 'stop', 'toggle-infinite'])
     <button class="btn-infinite" @click="emit('toggle-infinite')" :disabled="isPlaying && !infinitePlay">
       {{ infinitePlay ? 'Parar Infinito' : 'Reproduzir Infinito' }}
     </button>
+
+    <div v-if="isRecording" class="recording-indicator">
+      ● Gravando
+    </div>
   </div>
 </template>
 
@@ -55,5 +63,21 @@ button:disabled {
 .btn-infinite {
   background-color: #2196F3;
   color: white;
+}
+
+.recording-indicator {
+  color: #f44336;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+  padding: 0 10px;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
 }
 </style>

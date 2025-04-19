@@ -29,6 +29,14 @@ const loadSettings = () => {
   }
 }
 
+
+// gravacao de audio
+const isRecording = ref(false)
+const audioBlob = ref(null)
+const audioUrl = ref('')
+let mediaRecorder = null
+let audioChunks = ref([])
+
 // Estado reativo
 const frequency = ref(440)
 const duration = ref(2)
@@ -103,6 +111,58 @@ const initAudioNodes = () => {
   
   oscillator.start()
   isPlaying.value = true
+
+  // Cria um MediaStreamDestination para gravação
+  const destination = audioContext.createMediaStreamDestination()
+  gainNode.connect(destination)
+  if (useBinaural.value) {
+    gainNode2.connect(destination)
+  }
+
+  // Configura o MediaRecorder
+  mediaRecorder = new MediaRecorder(destination.stream)
+  audioChunks.value = []
+  
+  mediaRecorder.ondataavailable = (evt) => {
+    audioChunks.value.push(evt.data)
+  }
+
+  mediaRecorder.onstop = () => {
+    const blob = new Blob(audioChunks.value, { type: 'audio/wav' })
+    audioBlob.value = blob
+    audioUrl.value = URL.createObjectURL(blob)
+  }
+  
+  if (isRecording.value) {
+    mediaRecorder.start()
+  }
+
+}
+
+// Adicione estas novas funções
+const toggleRecording = () => {
+  if (!isPlaying.value) {
+    error.value = "Você precisa estar reproduzindo para gravar"
+    return
+  }
+  
+  if (isRecording.value) {
+    mediaRecorder.stop()
+    isRecording.value = false
+  } else {
+    isRecording.value = true
+    audioChunks.value = []
+    mediaRecorder.start()
+  }
+}
+
+const downloadAudio = () => {
+  if (!audioBlob.value) return
+  
+  const a = document.createElement('a')
+  a.href = audioUrl.value
+  a.download = `tonal_${frequency.value}hz_${new Date().toISOString().slice(0,10)}.wav`
+  a.click()
 }
 
 // Funções de controle
@@ -226,6 +286,24 @@ watch([baseFrequency, beatFrequency], () => {
         <WaveTypeSelector v-model="waveType" :disabled="isPlaying" />
         <VolumeControl v-model="volume" />
       </div>
+
+      <div class="recording-controls">
+    <button 
+      @click="toggleRecording" 
+      :class="{ 'btn-recording': isRecording }"
+      :disabled="!isPlaying"
+    >
+      {{ isRecording ? 'Parar Gravação' : 'Iniciar Gravação' }}
+    </button>
+    
+    <button 
+      @click="downloadAudio" 
+      class="btn-download"
+      :disabled="!audioBlob"
+    >
+      Exportar Áudio
+    </button>
+  </div>
       
       <FrequencyPresets 
         v-model="frequency" 
@@ -309,5 +387,21 @@ h1 {
   text-align: center;
   color: #2c3e50;
   margin-bottom: 20px;
+}
+
+.recording-controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.btn-recording {
+  background-color: #f44336;
+  color: white;
+}
+
+.btn-download {
+  background-color: #673ab7;
+  color: white;
 }
 </style>
