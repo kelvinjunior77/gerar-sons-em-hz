@@ -19,18 +19,18 @@ onMounted(() => {
 
 const draw = () => {
   animationId = requestAnimationFrame(draw)
-  
+
   const bufferLength = props.analyser.frequencyBinCount
   const dataArray = new Uint8Array(bufferLength)
   props.analyser.getByteTimeDomainData(dataArray)
-  
+
   canvasCtx.fillStyle = 'rgb(200, 200, 200)'
   canvasCtx.fillRect(0, 0, canvasRef.value.width, canvasRef.value.height)
-  
+
   canvasCtx.lineWidth = 2
   canvasCtx.strokeStyle = 'rgb(0, 0, 0)'
   canvasCtx.beginPath()
-  
+
   const sliceWidth = canvasRef.value.width / bufferLength
   let x = 0
 
@@ -60,5 +60,15 @@ watch(() => props.analyser, () => {
 </script>
 
 <template>
-  <canvas ref="canvasRef" width="800" height="150"></canvas>
+  
+
+  <!-- Visualizer -->
+  <div class="bg-gray-900 rounded-lg p-4">
+    <div class="h-32 w-full bg-gray-800 rounded relative overflow-hidden">
+      <div class="absolute inset-0 wave-visualizer">
+        <canvas ref="canvasRef" width="814" height="150"></canvas>
+      </div>
+    </div>
+  </div>
+
 </template>

@@ -21,10 +21,10 @@ onMounted(async () => {
   try {
     // Tempo mínimo de loading (melhor experiência)
     const minLoadingTime = new Promise(resolve => setTimeout(resolve, 1000))
-    
+
     // Inicialização real
     await initAudioContext()
-    
+
     // Garante o tempo mínimo
     await minLoadingTime
   } catch (e) {
@@ -45,10 +45,10 @@ const initAudioContext = async () => {
   try {
     loadingMessage.value = "Criando contexto de áudio..."
     audioContext = new (window.AudioContext || window.webkitAudioContext)()
-    
+
     loadingMessage.value = "Configurando analisador..."
     setupAnalyser()
-    
+
     loadingMessage.value = "Preparando recursos..."
     // Adicione aqui qualquer outra inicialização necessária
   } catch (e) {
@@ -107,36 +107,36 @@ const initAudioNodes = () => {
   // Configuração do oscilador principal
   oscillator = audioContext.createOscillator()
   gainNode = audioContext.createGain()
-  
+
   oscillator.type = waveType.value
   oscillator.frequency.setValueAtTime(frequency.value, audioContext.currentTime)
-  
+
   gainNode.gain.setValueAtTime(0, audioContext.currentTime)
   gainNode.gain.linearRampToValueAtTime(volume.value, audioContext.currentTime + 0.1)
-  
+
   // Conexão para visualização
   oscillator.connect(gainNode)
   gainNode.connect(analyser)
   analyser.connect(audioContext.destination)
-  
+
   // Configuração do segundo oscilador para batimentos binaurais
   if (useBinaural.value) {
     oscillator2 = audioContext.createOscillator()
     gainNode2 = audioContext.createGain()
-    
+
     oscillator2.type = waveType.value
     const freq2 = baseFrequency.value + beatFrequency.value
     oscillator2.frequency.setValueAtTime(freq2, audioContext.currentTime)
-    
+
     gainNode2.gain.setValueAtTime(0, audioContext.currentTime)
     gainNode2.gain.linearRampToValueAtTime(volume.value, audioContext.currentTime + 0.1)
-    
+
     oscillator2.connect(gainNode2)
     gainNode2.connect(analyser)
-    
+
     oscillator2.start()
   }
-  
+
   oscillator.start()
   isPlaying.value = true
 
@@ -150,7 +150,7 @@ const initAudioNodes = () => {
   // Configura o MediaRecorder
   mediaRecorder = new MediaRecorder(destination.stream)
   audioChunks.value = []
-  
+
   mediaRecorder.ondataavailable = (evt) => {
     audioChunks.value.push(evt.data)
   }
@@ -160,7 +160,7 @@ const initAudioNodes = () => {
     audioBlob.value = blob
     audioUrl.value = URL.createObjectURL(blob)
   }
-  
+
   if (isRecording.value) {
     mediaRecorder.start()
   }
@@ -173,7 +173,7 @@ const toggleRecording = () => {
     error.value = "Você precisa estar reproduzindo para gravar"
     return
   }
-  
+
   if (isRecording.value) {
     mediaRecorder.stop()
     isRecording.value = false
@@ -186,28 +186,28 @@ const toggleRecording = () => {
 
 const downloadAudio = () => {
   if (!audioBlob.value) return
-  
+
   const a = document.createElement('a')
   a.href = audioUrl.value
-  a.download = `tonal_${frequency.value}hz_${new Date().toISOString().slice(0,10)}.wav`
+  a.download = `tonal_${frequency.value}hz_${new Date().toISOString().slice(0, 10)}.wav`
   a.click()
 }
 
 // Funções de controle
 const playTone = () => {
   if (!audioContext || isPlaying.value) return
-  
+
   error.value = null
   infinitePlay.value = false
-  
+
   if (frequency.value < 20 || frequency.value > 20000) {
     error.value = "Por favor, insira uma frequência entre 20Hz e 20000Hz"
     return
   }
-  
+
   try {
     initAudioNodes()
-    
+
     stopTimeout = setTimeout(() => {
       if (isPlaying.value && !infinitePlay.value) {
         stopTone()
@@ -224,16 +224,16 @@ const toggleInfinitePlay = () => {
 
 const startInfinitePlay = () => {
   if (!audioContext || isPlaying.value) return
-  
+
   error.value = null
   infinitePlay.value = true
-  
+
   if (frequency.value < 20 || frequency.value > 20000) {
     error.value = "Por favor, insira uma frequência entre 20Hz e 20000Hz"
     infinitePlay.value = false
     return
   }
-  
+
   try {
     initAudioNodes()
   } catch (e) {
@@ -244,19 +244,19 @@ const startInfinitePlay = () => {
 
 const stopTone = () => {
   if ((!oscillator && !oscillator2) || !isPlaying.value) return
-  
+
   clearTimeout(stopTimeout)
   stopTimeout = null
-  
+
   try {
     const fadeOutTime = 0.1
     const now = audioContext.currentTime
     gainNode.gain.linearRampToValueAtTime(0, now + fadeOutTime)
-    
+
     if (gainNode2) {
       gainNode2.gain.linearRampToValueAtTime(0, now + fadeOutTime)
     }
-    
+
     setTimeout(() => {
       oscillator?.stop()
       oscillator?.disconnect()
@@ -302,151 +302,140 @@ watch([baseFrequency, beatFrequency], () => {
 
 <template>
 
-<LoadingSpinner 
-    v-if="isLoading"
-    :message="loadingMessage"
-    :progress="loadingProgress"
-  />
+  <LoadingSpinner v-if="isLoading" :message="loadingMessage" :progress="loadingProgress" />
 
-<!----<div v-if="isLoading" class="loading-overlay">
+  <!----<div v-if="isLoading" class="loading-overlay">
     <div class="loading-container">
       <div class="loading-spinner"></div>
       <p>{{ loadingMessage }}</p>
     </div>
   </div> ------>
 
-  <div v-else class="container">
-  <div class="container">
-    <h1>Gerador de Tons Avançado</h1>
-    
-    <div class="settings-grid">
-      <div class="input-group">
-        <FrequencyInput v-model="frequency" :disabled="isPlaying" />
-        <DurationInput v-model="duration" :disabled="infinitePlay || isPlaying" />
+  <div v-else class="bg-gradient-to-br from-dark to-gray-900 min-h-screen font-sans text-light">
+    <!-- Header/Navbar -->
+    <header class="py-6 px-4 sm:px-6 lg:px-8">
+      <div class="container mx-auto flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+          <svg class="w-8 h-8 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3">
+            </path>
+          </svg>
+          <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+            SoundWave
+          </h1>
+        </div>
+        <nav class="hidden md:flex space-x-8">
+          <a href="#" class="hover:text-primary transition-colors">Início</a>
+          <a href="#" class="hover:text-primary transition-colors">Recursos</a>
+          <a href="#" class="hover:text-primary transition-colors">Sobre</a>
+          <a href="#" class="hover:text-primary transition-colors">Contato</a>
+        </nav>
+        <button class="md:hidden text-gray-300">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
       </div>
-      
-      <div class="control-group">
-        <WaveTypeSelector v-model="waveType" :disabled="isPlaying" />
-        <VolumeControl v-model="volume" />
-      </div>
+    </header>
 
-      <div class="recording-controls">
-    <button 
-      @click="toggleRecording" 
-      :class="{ 'btn-recording': isRecording }"
-      :disabled="!isPlaying"
-    >
-      {{ isRecording ? 'Parar Gravação' : 'Iniciar Gravação' }}
-    </button>
-    
-    <button 
-      @click="downloadAudio" 
-      class="btn-download"
-      :disabled="!audioBlob"
-    >
-      Exportar Áudio
-    </button>
-  </div>
+
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="max-w-4xl mx-auto">
+
+        <section class="text-center mb-16">
+          <h2 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+            Crie <span class="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">sons
+              precisos</span> para suas necessidades
+          </h2>
+          <p class="text-lg text-gray-300 max-w-2xl mx-auto mb-8">
+            Gere frequências específicas, batimentos binaurais e explore o poder do som com nossa ferramenta
+            profissional.
+          </p>
+          <div class="flex justify-center space-x-4">
+            <a href="#comecar"
+              class="bg-primary hover:bg-primary/90 px-6 py-3 rounded-lg font-medium transition-all transform hover:scale-105">
+              Começar Agora
+          </a>
+            
+          </div>
+        </section>
+
+        <section id="comecar" class="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 shadow-xl border border-gray-700/50">
+          <h3 class="text-2xl font-semibold mb-6 flex items-center">
+            <svg class="w-6 h-6 mr-2 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15.536a5 5 0 001.414 1.414m-2.828-9.9a9 9 0 012.728-2.728">
+              </path>
+            </svg>
+            Gerador de Tons
+          </h3>
+
+          <div class="space-y-6">
+            <FrequencyInput v-model="frequency" :disabled="isPlaying" />
+            <FrequencyPresets v-model="frequency" :disabled="isPlaying" class="presets" />
+            <WaveTypeSelector v-model="waveType" :disabled="isPlaying" />
+            <VolumeControl v-model="volume" />
+            <AudioVisualizer v-if="isPlaying && analyser" :analyser="analyser" class="visualizer" />
+            
+            <ToneControls :is-playing="isPlaying" :infinite-play="infinitePlay" @play="playTone" @stop="stopTone"
+            @toggle-infinite="toggleInfinitePlay"> 
+
+            <template #gravacao>
+              <button class="border border-primary text-primary hover:bg-primary/10 px-5 py-2.5 rounded-lg font-medium flex items-center transition-all" @click="toggleRecording" :class="{ 'btn-recording': isRecording }" :disabled="!isPlaying">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+              </svg>
+              {{ isRecording ? 'Parar Gravação' : 'Gravar' }}
+            </button>
+
+            <button  @click="downloadAudio" class="bg-secondary hover:bg-secondary/90 px-5 py-2.5 rounded-lg font-medium flex items-center transition-all ml-auto" :disabled="!audioBlob">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+              </svg>
+              Exportar Áudio
+            </button>
+            </template>   
+
+            </ToneControls>
+            
+          </div>
+        </section>
+
+        <div class="settings-grid">
+
+          <BinauralBeats v-model:enabled="useBinaural" v-model:base="baseFrequency" v-model:beat="beatFrequency"
+            :disabled="isPlaying" class="binaural" />
+        </div>
+
       
-      <FrequencyPresets 
-        v-model="frequency" 
-        :disabled="isPlaying"
-        class="presets"
-      />
-      
-      <BinauralBeats
-        v-model:enabled="useBinaural"
-        v-model:base="baseFrequency"
-        v-model:beat="beatFrequency"
-        :disabled="isPlaying"
-        class="binaural"
-      />
-    </div>
-    
-    <ToneControls
-      :is-playing="isPlaying"
-      :infinite-play="infinitePlay"
-      @play="playTone"
-      @stop="stopTone"
-      @toggle-infinite="toggleInfinitePlay"
-    />
-    
-    <AudioVisualizer 
-      v-if="isPlaying && analyser" 
-      :analyser="analyser"
-      class="visualizer"
-    />
-    
-    <StatusDisplay
-      :is-playing="isPlaying"
-      :infinite-play="infinitePlay"
-      :frequency="frequency"
-      :duration="duration"
-      :error="error"
-      :wave-type="waveType"
-      :volume="volume"
-      :binaural-enabled="useBinaural"
-      :beat-frequency="beatFrequency"
-    />
+
+        <StatusDisplay :is-playing="isPlaying" :infinite-play="infinitePlay" :frequency="frequency" :duration="duration"
+          :error="error" :wave-type="waveType" :volume="volume" :binaural-enabled="useBinaural"
+          :beat-frequency="beatFrequency" />
+
+      </div>
+    </main>
+
   </div>
-</div>
 
 </template>
 
-<style scoped>
-.container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
+<style>
+.wave-visualizer {
+  background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.2), transparent);
+  animation: wave 1.5s linear infinite;
+  opacity: 0.8;
 }
 
-.settings-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
+@keyframes wave {
+  0% {
+    transform: translateX(-100%);
+  }
 
-.input-group, .control-group {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.presets {
-  grid-column: span 2;
-}
-
-.binaural {
-  grid-column: span 2;
-}
-
-.visualizer {
-  margin-top: 20px;
-  height: 150px;
-}
-
-h1 {
-  text-align: center;
-  color: #2c3e50;
-  margin-bottom: 20px;
-}
-
-.recording-controls {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.btn-recording {
-  background-color: #f44336;
-  color: white;
-}
-
-.btn-download {
-  background-color: #673ab7;
-  color: white;
+  100% {
+    transform: translateX(100%);
+  }
 }
 </style>

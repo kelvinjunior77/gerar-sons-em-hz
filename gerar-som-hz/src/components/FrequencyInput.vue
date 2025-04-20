@@ -14,17 +14,30 @@ const emit = defineEmits(['update:modelValue'])
 </script>
 
 <template>
-  <div>
-    <label for="frequency">Frequência (Hz):</label>
-    <input
-      type="number"
-      id="frequency"
-      :value="modelValue"
-      @input="emit('update:modelValue', Number($event.target.value))"
-      min="20"
-      max="20000"
-      step="1"
-      :disabled="disabled"
-    >
+  <div class="">
+    <label for="frequency" class="block text-sm font-medium mb-2 text-gray-300">Frequência (Hz)</label>
+    <div class="relative">
+
+
+      <div class="flex justify-between text-xs text-gray-400 mt-1" style="display: none;">
+        <span>20Hz</span>
+        <span>20kHz</span>
+      </div>
+
+      <div class="mt-2 flex items-center">
+
+        <input type="number" id="frequency" :value="modelValue"
+          @input="emit('update:modelValue', Number($event.target.value))" min="20" max="20000" step="1"
+          :disabled="disabled"
+          class="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 text-center focus:ring-2 focus:ring-primary focus:border-transparent">
+        <span class="ml-2 text-gray-300">Hz</span>
+      </div>
+
+
+    </div>
+
   </div>
+
+
+
 </template>

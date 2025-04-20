@@ -21,54 +21,18 @@ const selectPreset = (value) => {
 </script>
 
 <template>
-  <div class="presets">
-    <h3>Frequências Predefinidas:</h3>
-    <div class="preset-buttons">
-      <button
-        v-for="preset in presets"
-        :key="preset.value"
-        @click="selectPreset(preset.value)"
-        :disabled="disabled"
-      >
+ 
+
+  <!-- Wave Type Selector -->
+  <div>
+    <label class="block text-sm font-medium mb-2 text-gray-300">Frequências Predefinidas</label>
+    <div class="grid grid-cols-4 gap-2">
+
+      <button v-for="preset in presets" :key="preset.value" @click="selectPreset(preset.value)" :disabled="disabled"
+        class="bg-gray-700 hover:bg-gray-600 py-2 px-3 rounded-md text-sm font-medium transition-colors border border-transparent hover:border-primary/50">
         {{ preset.label }}
       </button>
+
     </div>
   </div>
 </template>
-
-<style scoped>
-.presets {
-  background: #f5f5f5;
-  padding: 15px;
-  border-radius: 8px;
-}
-
-h3 {
-  margin-top: 0;
-  margin-bottom: 10px;
-}
-
-.preset-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-button {
-  padding: 8px 12px;
-  background: #e0e0e0;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-button:hover:not(:disabled) {
-  background: #d0d0d0;
-}
-
-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-</style>
