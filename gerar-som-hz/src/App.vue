@@ -374,6 +374,7 @@ watch([baseFrequency, beatFrequency], () => {
 
           <div class="space-y-6">
             <FrequencyInput v-model="frequency" :disabled="isPlaying" />
+            <DurationInput v-model="duration" :disabled="infinitePlay || isPlaying" />
             <FrequencyPresets v-model="frequency" :disabled="isPlaying" class="presets" />
             <WaveTypeSelector v-model="waveType" :disabled="isPlaying" />
             <VolumeControl v-model="volume" />
@@ -383,14 +384,14 @@ watch([baseFrequency, beatFrequency], () => {
             @toggle-infinite="toggleInfinitePlay"> 
 
             <template #gravacao>
-              <button class="border border-primary text-primary hover:bg-primary/10 px-5 py-2.5 rounded-lg font-medium flex items-center transition-all" @click="toggleRecording" :class="{ 'btn-recording': isRecording }" :disabled="!isPlaying">
+              <button class="border border-primary text-primary hover:bg-primary/10 px-5 py-2.5 rounded-lg font-medium flex items-center transition-all cursor-pointer" @click="toggleRecording" :class="{ 'btn-recording': isRecording }" :disabled="!isPlaying">
               <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
               </svg>
               {{ isRecording ? 'Parar Gravação' : 'Gravar' }}
             </button>
 
-            <button  @click="downloadAudio" class="bg-secondary hover:bg-secondary/90 px-5 py-2.5 rounded-lg font-medium flex items-center transition-all ml-auto" :disabled="!audioBlob">
+            <button  @click="downloadAudio" class="bg-secondary hover:bg-secondary/90 px-5 py-2.5 rounded-lg font-medium flex items-center transition-all ml-auto cursor-pointer" :disabled="!audioBlob">
               <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
               </svg>

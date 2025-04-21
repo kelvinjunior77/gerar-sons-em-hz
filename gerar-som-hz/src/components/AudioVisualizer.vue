@@ -61,14 +61,15 @@ watch(() => props.analyser, () => {
 
 <template>
   
-
   <!-- Visualizer -->
   <div class="bg-gray-900 rounded-lg p-4">
     <div class="h-32 w-full bg-gray-800 rounded relative overflow-hidden">
-      <div class="absolute inset-0 wave-visualizer">
-        <canvas ref="canvasRef" width="814" height="150"></canvas>
+      <div class="">
+        <canvas ref="canvasRef" class="bg-gray-800" width="814" height="150"></canvas>
       </div>
     </div>
   </div>
+
+  
 
 </template>
