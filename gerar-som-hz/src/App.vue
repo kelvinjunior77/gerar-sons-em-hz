@@ -67,7 +67,7 @@ let mediaRecorder = null
 let audioChunks = ref([])
 
 // Estado reativo
-const frequency = ref(440)
+const frequency = ref(528)
 const duration = ref(2)
 const isPlaying = ref(false)
 const infinitePlay = ref(false)
