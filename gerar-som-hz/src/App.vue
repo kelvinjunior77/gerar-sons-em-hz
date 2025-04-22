@@ -322,9 +322,10 @@ watch([baseFrequency, beatFrequency], () => {
             </path>
           </svg>
           <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-            SoundWave
+            SoundHz
           </h1>
         </div>
+        <!----
         <nav class="hidden md:flex space-x-8">
           <a href="#" class="hover:text-primary transition-colors">Início</a>
           <a href="#" class="hover:text-primary transition-colors">Recursos</a>
@@ -335,7 +336,8 @@ watch([baseFrequency, beatFrequency], () => {
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
           </svg>
-        </button>
+        </button> 
+      ---->
       </div>
     </header>
 
@@ -350,8 +352,7 @@ watch([baseFrequency, beatFrequency], () => {
               precisos</span> para suas necessidades
           </h2>
           <p class="text-lg text-gray-300 max-w-2xl mx-auto mb-8">
-            Gere frequências específicas, batimentos binaurais e explore o poder do som com nossa ferramenta
-            profissional.
+            Gere frequências específicas, batimentos binaurais e explore o poder do som
           </p>
           <div class="flex justify-center space-x-4">
             <a href="#comecar"
@@ -369,7 +370,7 @@ watch([baseFrequency, beatFrequency], () => {
                 d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15.536a5 5 0 001.414 1.414m-2.828-9.9a9 9 0 012.728-2.728">
               </path>
             </svg>
-            Gerador de Tons
+            Gerador de Sons
           </h3>
 
           <div class="space-y-6">
