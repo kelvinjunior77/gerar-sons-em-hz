@@ -28,25 +28,17 @@ defineProps({
     {{ error }}
   </div>
   
-  <div v-if="isPlaying" class="playing status">
+  <div v-if="isPlaying" class="text-center bg-stone-300 rounded-md p-2 text-base font-medium">
     <p v-if="infinitePlay">Tocando infinito: {{ frequency }} Hz</p>
     <p v-else>Tocando: {{ frequency }} Hz por {{ duration }} segundos</p>
   </div>
 </template>
 
 <style scoped>
-.status {
-  margin-top: 10px;
-  padding: 10px;
-  border-radius: 4px;
-}
+ 
+ p {
+  color:#0f172a;
+ }
 
-.playing {
-  background-color: #e8f5e9;
-}
-
-.error {
-  background-color: #ffebee;
-  color: #f44336;
-}
 </style>
+

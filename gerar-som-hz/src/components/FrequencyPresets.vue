@@ -29,7 +29,7 @@ const selectPreset = (value) => {
     <div class="grid grid-cols-4 gap-2">
 
       <button v-for="preset in presets" :key="preset.value" @click="selectPreset(preset.value)" :disabled="disabled"
-        class="bg-gray-700 hover:bg-gray-600 py-2 px-3 rounded-md text-sm font-medium transition-colors border border-transparent hover:border-primary/50">
+        class="bg-gray-700 hover:bg-gray-600 py-2 px-3 rounded-md text-xs font-medium transition-colors border border-transparent hover:border-primary/50">
         {{ preset.label }}
       </button>
 

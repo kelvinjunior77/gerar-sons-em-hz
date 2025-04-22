@@ -11,67 +11,43 @@ const beatModel = defineModel('beat', { type: Number, default: 10 })
 </script>
 
 <template>
-  <div class="binaural-beats">
-    <label>
+  <div class="">
+    <label class="block text-sm font-medium mb-2 text-gray-300">
       <input 
         type="checkbox" 
         v-model="model"
-        :disabled="disabled"
+        :disabled="disabled" class="cursor-pointer"
       >
-      Batimentos Binaurais
+      Batimentos Binaurais 
     </label>
     
-    <div v-if="model" class="controls">
+    <div v-if="model" class="">
       <div>
-        <label>Frequência Base (Hz):</label>
+        <label class=" flex justify-between text-xs text-gray-400 mt-1">Frequência Base (Hz):</label>
         <input 
           type="range" 
           min="100" 
           max="500" 
           step="1"
           v-model="baseModel"
-          :disabled="disabled"
+          :disabled="disabled" class="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary"
         >
-        <span>{{ baseModel }} Hz</span>
+        <span class="text-xs m-1">{{ baseModel }} Hz</span>
       </div>
       
       <div>
-        <label>Frequência de Batimento (Hz):</label>
+        <label class="flex justify-between text-xs text-gray-400 mt-1">Frequência de Batimento (Hz):</label>
         <input 
           type="range" 
           min="1" 
           max="30" 
           step="0.1"
           v-model="beatModel"
-          :disabled="disabled"
+          :disabled="disabled" class="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary"
         >
-        <span>{{ beatModel.toFixed(1) }} Hz</span>
+        <span class="text-xs m-1">{{ beatModel.toFixed(1) }} Hz</span>
       </div>
     </div>
   </div>
 </template>
 
-<style scoped>
-.binaural-beats {
-  background: #f5f5f5;
-  padding: 15px;
-  border-radius: 8px;
-}
-
-.controls {
-  display: grid;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-}
-
-input[type="range"] {
-  width: 100%;
-}
-</style>

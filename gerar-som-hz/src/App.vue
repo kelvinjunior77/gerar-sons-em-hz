@@ -10,6 +10,7 @@ import FrequencyPresets from './components/FrequencyPresets.vue'
 import AudioVisualizer from './components/AudioVisualizer.vue'
 import BinauralBeats from './components/BinauralBeats.vue'
 import LoadingSpinner from './components/LoadingSpinner.vue'
+import Footer from './components/Footer.vue'
 
 
 // Estados de loading
@@ -342,7 +343,6 @@ watch([baseFrequency, beatFrequency], () => {
     </header>
 
 
-
     <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div class="max-w-4xl mx-auto">
 
@@ -358,20 +358,17 @@ watch([baseFrequency, beatFrequency], () => {
             <a href="#comecar"
               class="bg-primary hover:bg-primary/90 px-6 py-3 rounded-lg font-medium transition-all transform hover:scale-105">
               Começar Agora
-          </a>
-            
+            </a>
+
+            <a href="https://github.com/kelvinjunior99/gerar-sons-em-hz" class="border border-primary text-primary hover:bg-primary/10 px-6 py-3 rounded-lg font-medium transition-all">
+            Repositório
+            </a>
+
           </div>
         </section>
 
         <section id="comecar" class="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 shadow-xl border border-gray-700/50">
-          <h3 class="text-2xl font-semibold mb-6 flex items-center">
-            <svg class="w-6 h-6 mr-2 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15.536a5 5 0 001.414 1.414m-2.828-9.9a9 9 0 012.728-2.728">
-              </path>
-            </svg>
-            Gerador de Sons
-          </h3>
+         
 
           <div class="space-y-6">
             <FrequencyInput v-model="frequency" :disabled="isPlaying" />
@@ -380,45 +377,53 @@ watch([baseFrequency, beatFrequency], () => {
             <WaveTypeSelector v-model="waveType" :disabled="isPlaying" />
             <VolumeControl v-model="volume" />
             <AudioVisualizer v-if="isPlaying && analyser" :analyser="analyser" class="visualizer" />
-            
+
             <ToneControls :is-playing="isPlaying" :infinite-play="infinitePlay" @play="playTone" @stop="stopTone"
-            @toggle-infinite="toggleInfinitePlay"> 
+              @toggle-infinite="toggleInfinitePlay">
 
-            <template #gravacao>
-              <button class="border border-primary text-primary hover:bg-primary/10 px-5 py-2.5 rounded-lg font-medium flex items-center transition-all cursor-pointer" @click="toggleRecording" :class="{ 'btn-recording': isRecording }" :disabled="!isPlaying">
-              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
-              </svg>
-              {{ isRecording ? 'Parar Gravação' : 'Gravar' }}
-            </button>
+              <template #gravacao>
+                <button
+                  class="border border-rose-500 border-primary hover:bg-primary/10 px-2 py-2.5 rounded-lg text-rose-500 font-medium text-sm  flex items-center transition-all cursor-pointer"
+                  @click="toggleRecording" :class="{ 'btn-recording': isRecording }" :disabled="!isPlaying">
+                  <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z">
+                    </path>
+                  </svg>
+                  {{ isRecording ? 'Parar Gravação' : 'Gravar' }}
+                </button>
 
-            <button  @click="downloadAudio" class="bg-secondary hover:bg-secondary/90 px-5 py-2.5 rounded-lg font-medium flex items-center transition-all ml-auto cursor-pointer" :disabled="!audioBlob">
-              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-              </svg>
-              Exportar Áudio
-            </button>
-            </template>   
+                <button @click="downloadAudio"
+                  class="bg-secondary hover:bg-secondary/90 px-2 py-2.5 rounded-lg font-medium text-sm  flex items-center transition-all ml-auto cursor-pointer"
+                  :disabled="!audioBlob">
+                  <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                  </svg>
+                  Exportar Áudio
+                </button>
+              </template>
 
             </ToneControls>
-            
+         
+              <BinauralBeats v-model:enabled="useBinaural" v-model:base="baseFrequency" v-model:beat="beatFrequency"
+                :disabled="isPlaying" />
+
+                <StatusDisplay :is-playing="isPlaying" :infinite-play="infinitePlay" :frequency="frequency" :duration="duration"
+          :error="error" :wave-type="waveType" :volume="volume" :binaural-enabled="useBinaural"
+          :beat-frequency="beatFrequency" />
+       
+
           </div>
         </section>
 
-        <div class="settings-grid">
-
-          <BinauralBeats v-model:enabled="useBinaural" v-model:base="baseFrequency" v-model:beat="beatFrequency"
-            :disabled="isPlaying" class="binaural" />
-        </div>
-
-      
-
-        <StatusDisplay :is-playing="isPlaying" :infinite-play="infinitePlay" :frequency="frequency" :duration="duration"
-          :error="error" :wave-type="waveType" :volume="volume" :binaural-enabled="useBinaural"
-          :beat-frequency="beatFrequency" />
 
       </div>
     </main>
+
+
+     <!-- Footer -->
+    <Footer />
 
   </div>
 
