@@ -12,11 +12,30 @@ import BinauralBeats from './components/BinauralBeats.vue'
 import LoadingSpinner from './components/LoadingSpinner.vue'
 import Footer from './components/Footer.vue'
 
+// salvar configurações
+const saveSettings = () => {
+  localStorage.setItem('audioSettings', JSON.stringify({
+    volume: volume.value,
+    waveType: waveType.value,
+    frequency: frequency.value
+  }))
+}
+
+// E carregar no onMounted
+const loadSettings = () => {
+  const saved = JSON.parse(localStorage.getItem('audioSettings'))
+  if (saved) {
+    volume.value = saved.volume
+    waveType.value = saved.waveType
+    frequency.value = saved.frequency
+  }
+}
 
 // Estados de loading
 const isLoading = ref(true)
 const loadingMessage = ref("Inicializando sistema de áudio...")
 const loadingProgress = ref(0)
+
 
 onMounted(async () => {
   try {
