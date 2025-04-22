@@ -19,11 +19,13 @@ defineProps({
       
       <p class="loading-message">{{ message }}</p>
       
-      <div v-if="progress !== null" class="progress-bar">
+      <div v-if="progress !== null" class="progress-bar bg-indigo-500 ">
         <div class="progress" :style="{ width: `${progress}%` }"></div>
       </div>
     </div>
   </div>
+
+  
 </template>
 
 <style scoped>
@@ -52,7 +54,7 @@ defineProps({
 
 .loading-spinner {
   border: 4px solid rgba(0, 0, 0, 0.1);
-  border-left-color: #42b883;
+  border-left-color: #2c3e50;
   border-radius: 50%;
   width: 40px;
   height: 40px;
