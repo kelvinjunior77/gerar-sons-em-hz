@@ -209,7 +209,7 @@ const downloadAudio = () => {
 
   const a = document.createElement('a')
   a.href = audioUrl.value
-  a.download = `tonal_${frequency.value}hz_${new Date().toISOString().slice(0, 10)}.wav`
+  a.download = `soundhz${frequency.value}hz_${new Date().toISOString().slice(0, 10)}.wav`
   a.click()
 }
 
@@ -379,7 +379,7 @@ watch([baseFrequency, beatFrequency], () => {
               Começar Agora
             </a>
 
-            <a href="https://github.com/kelvinjunior99/gerar-sons-em-hz" class="border border-primary text-primary hover:bg-primary/10 px-6 py-3 rounded-lg font-medium transition-all">
+            <a href="https://github.com/kelvinjunior77/gerar-sons-em-hz" class="border border-primary text-primary hover:bg-primary/10 px-6 py-3 rounded-lg font-medium transition-all">
             Repositório
             </a>
 
