@@ -1,4 +1,4 @@
-# 🎵 SoundHz
+![image](https://github.com/user-attachments/assets/7400c4b5-3024-49d3-9e6c-f1fd0817ff29)# 🎵 SoundHz
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 <!-- [![PWA Ready](https://img.shields.io/badge/PWA-Ready-brightgreen.svg)](https://web.dev/progressive-web-apps/) 
@@ -7,7 +7,8 @@ desenvolvido como PWA (Progressive Web App).-->
 
 Um gerador de frequências audiáveis completo com visualizador de onda, batimentos binaurais e exportação de áudio.
 
-![Screenshot da Aplicação](public/captura.png) <!-- Adicione uma screenshot real -->
+<img src="public/captura.png" width='10'>
+
 
 ## ✨ Funcionalidades
 
