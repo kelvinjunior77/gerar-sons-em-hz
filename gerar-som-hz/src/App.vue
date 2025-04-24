@@ -367,7 +367,7 @@ watch([baseFrequency, beatFrequency], () => {
 
         <section class="text-center mb-16">
           <h2 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-            Crie <span class="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">sons
+            Crie <span class="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">som
               precisos</span> para suas necessidades
           </h2>
           <p class="text-lg text-gray-300 max-w-2xl mx-auto mb-8">
