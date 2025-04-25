@@ -368,10 +368,10 @@ watch([baseFrequency, beatFrequency], () => {
         <section class="text-center mb-16">
           <h2 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
             Crie <span class="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">som
-              precisos</span> para suas necessidades. Teste
+              precisos</span> para suas necessidades. 
           </h2>
           <p class="text-lg text-gray-300 max-w-2xl mx-auto mb-8">
-            Gere frequências específicas, batimentos binaurais e explore o poder do som
+            Gere frequências específicas, batimentos binaurais e explore o poder do som.
           </p>
           <div class="flex justify-center space-x-4">
             <a href="#comecar"
