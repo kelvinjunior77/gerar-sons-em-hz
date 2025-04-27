@@ -461,7 +461,7 @@ watch([baseFrequency, beatFrequency], () => {
             </ToneControls>
 
             <BinauralBeats v-model:enabled="useBinaural" v-model:binauralActive="binauralMode" @frequency-update="(newFreq) => frequency = newFreq"
-              :disabled="isPlaying" />
+               />
 
             <StatusDisplay :is-playing="isPlaying" :infinite-play="infinitePlay" :frequency="frequency"
               :duration="duration" :error="error" :wave-type="waveType" :volume="volume" :binaural-enabled="useBinaural"
