@@ -85,8 +85,18 @@ const audioUrl = ref('')
 let mediaRecorder = null
 let audioChunks = ref([])
 
+// Controla a visibilidade do modal
+const showPresetsModal = ref(false)
+
 // Estado reativo
 const frequency = ref(528)
+
+// Função que será chamada quando selecionar uma frequência
+const applyPresetFrequency = (selectedFreq) => {
+  frequency.value = selectedFreq
+}
+
+
 const duration = ref(2)
 const isPlaying = ref(false)
 const infinitePlay = ref(false)
@@ -368,7 +378,7 @@ watch([baseFrequency, beatFrequency], () => {
         <section class="text-center mb-16">
           <h2 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
             Crie <span class="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">som
-              precisos</span> para suas necessidades. 
+              precisos</span> para suas necessidades.
           </h2>
           <p class="text-lg text-gray-300 max-w-2xl mx-auto mb-8">
             Gere frequências específicas, batimentos binaurais e explore o poder do som.
@@ -379,20 +389,30 @@ watch([baseFrequency, beatFrequency], () => {
               Começar Agora
             </a>
 
-            <a href="https://github.com/kelvinjunior77/gerar-sons-em-hz" class="border border-primary text-primary hover:bg-primary/10 px-6 py-3 rounded-lg font-medium transition-all">
-            Repositório
+            <a href="https://github.com/kelvinjunior77/gerar-sons-em-hz"
+              class="border border-primary text-primary hover:bg-primary/10 px-6 py-3 rounded-lg font-medium transition-all">
+              Repositório
             </a>
 
           </div>
         </section>
 
-        <section id="comecar" class="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 shadow-xl border border-gray-700/50">
-         
+        <section id="comecar"
+          class="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 shadow-xl border border-gray-700/50">
+
 
           <div class="space-y-6">
             <FrequencyInput v-model="frequency" :disabled="isPlaying" />
             <DurationInput v-model="duration" :disabled="infinitePlay || isPlaying" />
-            <FrequencyPresets v-model="frequency" :disabled="isPlaying" class="presets" />
+
+            <!-- Botão para abrir o modal -->
+            <button @click="showPresetsModal = true" class="preset-btn bg-slate-700 rounded-md p-2 text-sm">
+              Frequências Predefinidas
+            </button>
+
+            <FrequencyPresets v-model="frequency" :disabled="isPlaying" :isOpen="showPresetsModal"
+              @close="showPresetsModal = false" @select="applyPresetFrequency" />
+
             <WaveTypeSelector v-model="waveType" :disabled="isPlaying" />
             <VolumeControl v-model="volume" />
             <AudioVisualizer v-if="isPlaying && analyser" :analyser="analyser" class="visualizer" />
@@ -424,14 +444,14 @@ watch([baseFrequency, beatFrequency], () => {
               </template>
 
             </ToneControls>
-         
-              <BinauralBeats v-model:enabled="useBinaural" v-model:base="baseFrequency" v-model:beat="beatFrequency"
-                :disabled="isPlaying" />
 
-                <StatusDisplay :is-playing="isPlaying" :infinite-play="infinitePlay" :frequency="frequency" :duration="duration"
-          :error="error" :wave-type="waveType" :volume="volume" :binaural-enabled="useBinaural"
-          :beat-frequency="beatFrequency" />
-       
+            <BinauralBeats v-model:enabled="useBinaural" v-model:base="baseFrequency" v-model:beat="beatFrequency"
+              :disabled="isPlaying" />
+
+            <StatusDisplay :is-playing="isPlaying" :infinite-play="infinitePlay" :frequency="frequency"
+              :duration="duration" :error="error" :wave-type="waveType" :volume="volume" :binaural-enabled="useBinaural"
+              :beat-frequency="beatFrequency" />
+
 
           </div>
         </section>
@@ -441,7 +461,7 @@ watch([baseFrequency, beatFrequency], () => {
     </main>
 
 
-     <!-- Footer -->
+    <!-- Footer -->
     <Footer />
 
   </div>
@@ -464,4 +484,10 @@ watch([baseFrequency, beatFrequency], () => {
     transform: translateX(100%);
   }
 }
+
+
+.preset-btn {
+  @apply flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors;
+}
+
 </style>

@@ -30,7 +30,7 @@ const emit = defineEmits(['update:modelValue'])
           @input="emit('update:modelValue', Number($event.target.value))" min="20" max="20000" step="1"
           :disabled="disabled"
           class="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 text-center">
-        <span class="ml-2 text-gray-300">Hz</span>
+         <!---<span class="ml-2 text-gray-300">Hz</span>---> 
       </div>
 
 

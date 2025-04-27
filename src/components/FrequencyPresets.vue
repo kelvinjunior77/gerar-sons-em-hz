@@ -1,38 +1,80 @@
+<!-- src/components/PresetFrequenciesModal.vue -->
 <script setup>
-const props = defineProps({
-  disabled: Boolean
+import Modal from './Modal.vue'
+
+defineProps({
+  isOpen: Boolean
 })
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['close', 'select'])
 
-const presets = [
-  { label: 'Lá Musical (440Hz)', value: 440 },
-  { label: 'Dó (261.63Hz)', value: 261.63 },
-  { label: 'Mi (329.63Hz)', value: 329.63 },
-  { label: 'Sol (392Hz)', value: 392 },
-  { label: 'Meditação Theta (4-8Hz)', value: 6 },
-  { label: 'Meditação Alpha (8-12Hz)', value: 10 },
-  { label: 'Foco Beta (14-30Hz)', value: 20 }
+// Lista completa de frequências
+const presetFrequencies = [
+  { name: 'Lá Musical (440Hz)', value: 440, type: 'music' },
+  { name: 'Dó (261.63Hz)', value: 261.63, type: 'music' },
+  { name: 'Mi (329.63Hz)', value: 329.63, type: 'music' },
+  { name: 'Sol (392Hz)', value: 392, type: 'music' },
+  { name: 'Meditação Theta (4-8Hz)', value: 6, type: 'meditation' },
+  { name: 'Meditação Alpha (8-12Hz)', value: 10, type: 'meditation' },
+  { name: 'Foco Beta (14-30Hz)', value: 20, type: 'focus' }
 ]
 
-const selectPreset = (value) => {
-  emit('update:modelValue', value)
+const selectFrequency = (freq) => {
+  emit('select', freq)
+  emit('close')
 }
 </script>
 
 <template>
- 
+  <Modal 
+    :isOpen="isOpen" 
+    title="Frequências"
+    @close="$emit('close')"
+  >
+    <div class="space-y-3">
+      <!-- Seção de Notas Musicais -->
+      <div>
+        <h4 class="font-medium text-gray-500 dark:text-gray-400 mb-2">Notas Musicais</h4>
+        <div class="space-y-2 flex flex-col">
+          <div>
+            <button
+            v-for="preset in presetFrequencies.filter(p => p.type === 'music')"
+            :key="preset.value"
+            @click="selectFrequency(preset.value)"
+            class="preset-item p-2 m-1 bg-slate-700 rounded-md text-sm"
+          >
+            {{ preset.name }}
+            
+          </button>
+          </div>
+          
+        </div>
+      </div>
 
-  <!-- Wave Type Selector -->
-  <div>
-    <label class="block text-sm font-medium mb-2 text-gray-300">Frequências Predefinidas</label>
-    <div class="grid grid-cols-4 gap-2">
-
-      <button v-for="preset in presets" :key="preset.value" @click="selectPreset(preset.value)" :disabled="disabled"
-        class="bg-gray-700 hover:bg-gray-600 py-2 px-3 rounded-md text-xs font-medium transition-colors border border-transparent hover:border-primary/50">
-        {{ preset.label }}
-      </button>
-
+      <!-- Seção de Meditação -->
+      <div>
+        <h4 class="font-medium text-gray-500 dark:text-gray-400 mb-2">Meditação</h4>
+        <div class="space-y-2 flex flex-col">
+          <button
+            v-for="preset in presetFrequencies.filter(p => p.type === 'meditation')"
+            :key="preset.value"
+            @click="selectFrequency(preset.value)"
+            class="preset-item p-2 m-1 bg-slate-700 rounded-md text-sm"
+          >
+            {{ preset.name }}
+          </button>
+        </div>
+      </div>
     </div>
-  </div>
+  </Modal>
 </template>
+
+<style>
+.preset-item {
+  @apply w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors flex justify-between items-center;
+}
+
+.frequency-value {
+  @apply bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 px-2 py-1 rounded text-sm;
+}
+</style>
