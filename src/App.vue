@@ -96,6 +96,21 @@ const applyPresetFrequency = (selectedFreq) => {
   frequency.value = selectedFreq
 }
 
+const binauralMode = ref(false)
+// Quando binauralMode estiver ativo
+if (binauralMode.value) {
+  // Crie dois osciladores
+  const osc1 = new OscillatorNode(audioContext, { frequency: baseFreq.value })
+  const osc2 = new OscillatorNode(audioContext, { frequency: baseFreq.value + beatFreq.value })
+
+  // Conecte-os ao destino
+  osc1.connect(audioContext.destination)
+  osc2.connect(audioContext.destination)
+
+  // Inicie os osciladores
+  osc1.start()
+  osc2.start()
+}
 
 const duration = ref(2)
 const isPlaying = ref(false)
@@ -445,13 +460,12 @@ watch([baseFrequency, beatFrequency], () => {
 
             </ToneControls>
 
-            <BinauralBeats v-model:enabled="useBinaural" v-model:base="baseFrequency" v-model:beat="beatFrequency"
+            <BinauralBeats v-model:enabled="useBinaural" v-model:binauralActive="binauralMode" @frequency-update="(newFreq) => frequency = newFreq"
               :disabled="isPlaying" />
 
             <StatusDisplay :is-playing="isPlaying" :infinite-play="infinitePlay" :frequency="frequency"
               :duration="duration" :error="error" :wave-type="waveType" :volume="volume" :binaural-enabled="useBinaural"
               :beat-frequency="beatFrequency" />
-
 
           </div>
         </section>
@@ -484,10 +498,4 @@ watch([baseFrequency, beatFrequency], () => {
     transform: translateX(100%);
   }
 }
-
-
-.preset-btn {
-  @apply flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors;
-}
-
 </style>

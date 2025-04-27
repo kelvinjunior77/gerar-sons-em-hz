@@ -1,53 +1,159 @@
 <script setup>
-defineProps({
-  disabled: Boolean
+import { ref, watch } from 'vue'
+import Modal from './Modal.vue'
+
+const props = defineProps({
+  binauralActive: Boolean
 })
 
-defineEmits(['update:enabled', 'update:base', 'update:beat'])
+const emit = defineEmits([
+  'update:binauralActive',
+  'frequency-update'
+])
 
-const model = defineModel('enabled', { type: Boolean })
-const baseModel = defineModel('base', { type: Number, default: 200 })
-const beatModel = defineModel('beat', { type: Number, default: 10 })
+const showPanel = ref(false)
+const baseFreq = ref(200)
+const beatFreq = ref(10)
+
+// Presets melhorados
+const presets = [
+  {
+    name: "Relaxamento Profundo",
+    base: 150,
+    beat: 4,
+    icon: "🌊",
+    desc: "Ondas Theta (4-8Hz) - Ideal para meditação"
+  },
+  {
+    name: "Foco Criativo",
+    base: 300,
+    beat: 14,
+    icon: "🎯",
+    desc: "Ondas Beta (14-30Hz) - Melhora a concentração"
+  }
+]
+
+// Aplica um preset
+const applyPreset = (preset) => {
+  baseFreq.value = preset.base
+  beatFreq.value = preset.beat
+  activateBinaural()
+}
+
+// Ativa os batimentos
+const activateBinaural = () => {
+  emit('update:binauralActive', true)
+  emit('frequency-update', baseFreq.value)
+  showPanel.value = false
+}
+
+// Desativa os batimentos
+const deactivateBinaural = () => {
+  emit('update:binauralActive', false)
+}
+
+// Sincroniza com o estado externo
+watch(() => props.binauralActive, (newVal) => {
+  if (!newVal) {
+    showPanel.value = false
+  }
+})
 </script>
 
 <template>
-  <div class="">
-    <label class="block text-sm font-medium mb-2 text-gray-300">
-      <input 
-        type="checkbox" 
-        v-model="model"
-        :disabled="disabled" class="cursor-pointer"
-      >
-      Batimentos Binaurais 
-    </label>
-    
-    <div v-if="model" class="">
-      <div>
-        <label class=" flex justify-between text-xs text-gray-400 mt-1">Frequência Base (Hz):</label>
-        <input 
-          type="range" 
-          min="100" 
-          max="500" 
-          step="1"
-          v-model="baseModel"
-          :disabled="disabled" class="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary"
-        >
-        <span class="text-xs m-1">{{ baseModel }} Hz</span>
-      </div>
+  <div class="binaural-wrapper">
+    <!-- Botão Principal -->
+    <button
+      @click="showPanel = true"
+      :class="{ 'active': binauralActive }"
+      class="p-2 bg-slate-700 rounded-md text-sm font-bold "
+    >
+      Batimentos Binaurais
       
-      <div>
-        <label class="flex justify-between text-xs text-gray-400 mt-1">Frequência de Batimento (Hz):</label>
-        <input 
-          type="range" 
-          min="1" 
-          max="30" 
-          step="0.1"
-          v-model="beatModel"
-          :disabled="disabled" class="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary"
-        >
-        <span class="text-xs m-1">{{ beatModel.toFixed(1) }} Hz</span>
+      <span v-if="binauralActive" class="p-2">
+        - {{ baseFreq }}Hz ±{{ beatFreq }}Hz
+      </span>
+    </button>
+    
+
+    <!-- Modal/Painel de Controle -->
+    <Modal :isOpen="showPanel" @close="showPanel = false">
+      <div class="container text-center">
+        <h3>Configurar Batimentos Binaurais</h3> <br>
+        
+        <!-- Seção de Presets -->
+        <div class="flex flex-col ">
+          <div class="">
+            <button
+              v-for="(preset, index) in presets"
+              :key="index"
+              @click="applyPreset(preset)"
+              class="bg-gray-700 m-2 rounded-lg"
+            >
+             
+              <div class="p-2 text-sm">
+                <div class="mb-3">
+                  <span class="preset-icon">{{ preset.icon }}</span><br>
+                <strong>{{ preset.name }}</strong>
+                </div>
+                <p class="mt-1">{{ preset.desc }}</p>
+                <span class="preset-freq">
+                  {{ preset.base }}Hz ±{{ preset.beat }}Hz
+                </span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Controles Manuais -->
+        
+          <div class="flex justify-center mt-4 text-sm">
+          <div class="">
+            <label class="text-gray-300">Frequência Base: {{ baseFreq }}Hz</label>
+            <input
+              type="range"
+              v-model="baseFreq"
+              min="100"
+              max="500"
+              step="1"
+              class="mt-1 w-24"
+            >
+          </div>
+          
+          <div class="ml-2">
+            <label class="text-gray-300">Diferença: {{ beatFreq }}Hz</label>
+            <input
+              type="range"
+              v-model="beatFreq"
+              min="1"
+              max="30"
+              step="0.1"
+              class="mt-1 w-24"
+            >
+          </div>
+        </div>
+      
+       
+
+       
+        <div class="mt-4">
+          <button
+            v-if="!binauralActive"
+            @click="activateBinaural"
+            class="bg-primary hover:bg-primary/90 px-2 py-2.5 rounded-lg font-medium text-sm transition-all"
+          >
+            Ativar Batimentos
+          </button>
+          <button
+            v-else
+            @click="deactivateBinaural"
+            class="bg-red-400 px-2 py-2.5 rounded-lg font-medium text-sm transition-all"
+          >
+            Desativar
+          </button>
+        </div>
       </div>
-    </div>
+    </Modal>
   </div>
 </template>
 
