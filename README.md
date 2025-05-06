@@ -18,7 +18,7 @@ Um gerador de frequências audiáveis completo com visualizador de onda, batimen
 - 🎧 **Batimentos binaurais** (combinação de frequências)
 - 📊 **Visualizador de onda** em tempo real
 - 💾 **Exportação** de áudio em formato WAV
-- 📱 **PWA** (instalável em dispositivos móveis/desktop) - brevemente
+- 📱 **PWA** (instalável em dispositivos móveis/desktop)
 
 ## 🛠️ Tecnologias Utilizadas
 
