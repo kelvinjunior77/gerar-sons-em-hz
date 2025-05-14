@@ -24,7 +24,7 @@ defineProps({
 </script>
 
 <template>
-  <div v-if="error" class="error status">
+  <div v-if="error" class="text-base text-center text-red-400 m-0" style="margin-top: -3px;">
     {{ error }}
   </div>
   

@@ -1,6 +1,7 @@
 <script setup>
-defineProps({
+import { ref, onMounted } from 'vue';
 
+defineProps({
   isPlaying: {
     type: Boolean,
     required: true
@@ -15,12 +16,23 @@ defineProps({
 })
 
 const emit = defineEmits(['play', 'stop', 'toggle-infinite'])
+
+var tipo = ref(false)
+
+const mostrar = () => {
+    tipo.value = true
+}
+onMounted(() => {
+    setTimeout(() => {
+      tipo.value = false
+    }, 3000);
+})
+
 </script>
 
 <template>
   <!-- Controls -->
   <div class="flex flex-wrap gap-3 pt-2">
-
 
     <button class="bg-primary hover:bg-primary/90 px-2 py-2.5 rounded-lg font-medium text-sm flex items-center transition-all"
       @click="emit('play')" :disabled="isPlaying">
@@ -74,12 +86,6 @@ const emit = defineEmits(['play', 'stop', 'toggle-infinite'])
               </svg>
               Exportar
             </button> --->
-  </div>
-
-
-
-  <div v-if="isRecording" class="recording-indicator">
-    ● Gravando
   </div>
 
 </template>

@@ -212,7 +212,7 @@ const initAudioNodes = () => {
 
 }
 
-// Adicione estas novas funções
+
 const toggleRecording = () => {
   if (!isPlaying.value) {
     error.value = "Você precisa estar reproduzindo para gravar"
@@ -418,6 +418,8 @@ watch([baseFrequency, beatFrequency], () => {
 
           <div class="space-y-6">
             <FrequencyInput v-model="frequency" :disabled="isPlaying" />
+            <StatusDisplay :error="error" />
+
             <DurationInput v-model="duration" :disabled="infinitePlay || isPlaying" />
 
             <!-- Botão para abrir o modal -->
