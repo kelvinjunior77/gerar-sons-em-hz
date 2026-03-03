@@ -10,7 +10,7 @@ Um gerador de frequências audiáveis completo com visualizador de onda, batimen
 <img src="public/captura.png" width='10'>
 
 
-## ✨ Funcionalidades
+## Funcionalidades
 
 - 🔊 Geração de tons de **20Hz a 20kHz**
 - 🌗 **4 tipos de onda**: seno, quadrada, serra e triangular
@@ -31,7 +31,7 @@ Um gerador de frequências audiáveis completo com visualizador de onda, batimen
 ![Vite](https://img.shields.io/badge/Vite-4.x-646CFF?logo=vite)
 ![PWA](https://img.shields.io/badge/PWA_Ready-✓-5A0FC8)
 
-## 🚀 Instalação
+## Instalação
 
 ### Pré-requisitos
 - Node.js (v16 ou superior)
